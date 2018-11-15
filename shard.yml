@@ -1,0 +1,13 @@
+name: crestal-myth
+version: 0.1.0
+
+authors:
+  - Robin Broda <robin@broda.me>
+
+targets:
+  crestal-myth:
+    main: src/crestal-myth.cr
+
+crystal: 0.27.0
+
+license: AGPLv3

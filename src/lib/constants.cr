@@ -1,0 +1,6 @@
+module Crestal::Myth
+  CPU_CLOCK_HZ   = 4194304
+  CPU_CLOCK_TIME = 1.second / CPU_CLOCK_HZ
+  SCREEN_WIDTH   = 160
+  SCREEN_HEIGHT  = 144
+end

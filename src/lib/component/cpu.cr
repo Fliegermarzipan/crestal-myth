@@ -37,27 +37,123 @@ module Crestal::Myth::Component
       @ops[opcode].run self
     end
 
+    macro gen_op(name, op, time, args)
+      @ops[{{op}}] = Emulator::Instruction::{{name}}.new {{op}}_u8, {{time}}, {{args}}
+    end
+
     def seed_ops
-      @ops[0x00] = Emulator::Instruction::NOP.new 0x00_u8, 4
-      @ops[0xa8] = Emulator::Instruction::XOR.new 0xa8_u8, 4, [Reg8::B] of Emulator::OpArgs
-      @ops[0xa9] = Emulator::Instruction::XOR.new 0xa9_u8, 4, [Reg8::C] of Emulator::OpArgs
-      @ops[0xaa] = Emulator::Instruction::XOR.new 0xaa_u8, 4, [Reg8::D] of Emulator::OpArgs
-      @ops[0xab] = Emulator::Instruction::XOR.new 0xab_u8, 4, [Reg8::E] of Emulator::OpArgs
-      @ops[0xac] = Emulator::Instruction::XOR.new 0xac_u8, 4, [Reg8::H] of Emulator::OpArgs
-      @ops[0xad] = Emulator::Instruction::XOR.new 0xad_u8, 4, [Reg8::L] of Emulator::OpArgs
-      @ops[0xae] = Emulator::Instruction::XOR.new 0xae_u8, 8, [Reg16Mem::HL] of Emulator::OpArgs
-      @ops[0xaf] = Emulator::Instruction::XOR.new 0xaf_u8, 4, [Reg8::A] of Emulator::OpArgs
-      @ops[0xc2] = Emulator::Instruction::JP.new 0xc2_u8, 12, [Emulator::Conditional::NZ] of Emulator::OpArgs
-      @ops[0xc3] = Emulator::Instruction::JP.new 0xc3_u8, 12, [Emulator::DirectValue::SHORT] of Emulator::OpArgs
-      @ops[0xc4] = Emulator::Instruction::CALL.new 0xc4_u8, 12, [Emulator::Conditional::NZ, Emulator::DirectValue::SHORT] of Emulator::OpArgs
-      @ops[0xca] = Emulator::Instruction::JP.new 0xca_u8, 12, [Emulator::Conditional::Z] of Emulator::OpArgs
-      @ops[0xcc] = Emulator::Instruction::CALL.new 0xcc_u8, 12, [Emulator::Conditional::Z, Emulator::DirectValue::SHORT] of Emulator::OpArgs
-      @ops[0xcd] = Emulator::Instruction::CALL.new 0xcd_u8, 12, [Emulator::DirectValue::SHORT] of Emulator::OpArgs
-      @ops[0xd2] = Emulator::Instruction::JP.new 0xd2_u8, 12, [Emulator::Conditional::NC] of Emulator::OpArgs
-      @ops[0xd4] = Emulator::Instruction::CALL.new 0xd4_u8, 12, [Emulator::Conditional::NC, Emulator::DirectValue::SHORT] of Emulator::OpArgs
-      @ops[0xda] = Emulator::Instruction::JP.new 0xda_u8, 12, [Emulator::Conditional::C] of Emulator::OpArgs
-      @ops[0xdc] = Emulator::Instruction::CALL.new 0xdc_u8, 12, [Emulator::Conditional::C, Emulator::DirectValue::SHORT] of Emulator::OpArgs
-      @ops[0xee] = Emulator::Instruction::XOR.new 0xee_u8, 8, [Emulator::DirectValue::BYTE] of Emulator::OpArgs
+      gen_op NOP, 0x00, 4, [] of Emulator::OpArgs
+
+      gen_op XOR, 0xa8, 4, [Reg8::B] of Emulator::OpArgs
+      gen_op XOR, 0xa9, 4, [Reg8::C] of Emulator::OpArgs
+      gen_op XOR, 0xaa, 4, [Reg8::D] of Emulator::OpArgs
+      gen_op XOR, 0xab, 4, [Reg8::E] of Emulator::OpArgs
+      gen_op XOR, 0xac, 4, [Reg8::H] of Emulator::OpArgs
+      gen_op XOR, 0xad, 4, [Reg8::L] of Emulator::OpArgs
+      gen_op XOR, 0xae, 8, [Reg16Mem::HL] of Emulator::OpArgs
+      gen_op XOR, 0xaf, 4, [Reg8::A] of Emulator::OpArgs
+      gen_op XOR, 0xee, 8, [Emulator::DirectValue::BYTE] of Emulator::OpArgs
+
+      gen_op JP, 0xc2, 12, [Emulator::Conditional::NZ] of Emulator::OpArgs
+      gen_op JP, 0xc3, 12, [Emulator::DirectValue::SHORT] of Emulator::OpArgs
+      gen_op JP, 0xca, 12, [Emulator::Conditional::Z] of Emulator::OpArgs
+      gen_op JP, 0xd2, 12, [Emulator::Conditional::NC] of Emulator::OpArgs
+      gen_op JP, 0xda, 12, [Emulator::Conditional::C] of Emulator::OpArgs
+
+      gen_op CALL, 0xc4, 12, [Emulator::Conditional::NZ, Emulator::DirectValue::SHORT] of Emulator::OpArgs
+      gen_op CALL, 0xcc, 12, [Emulator::Conditional::Z, Emulator::DirectValue::SHORT] of Emulator::OpArgs
+      gen_op CALL, 0xcd, 12, [Emulator::DirectValue::SHORT] of Emulator::OpArgs
+      gen_op CALL, 0xd4, 12, [Emulator::Conditional::NC, Emulator::DirectValue::SHORT] of Emulator::OpArgs
+      gen_op CALL, 0xdc, 12, [Emulator::Conditional::C, Emulator::DirectValue::SHORT] of Emulator::OpArgs
+
+      gen_op LD, 0x02, 8, [Reg16Mem::BC, Reg8::A] of Emulator::OpArgs
+      gen_op LD, 0x06, 8, [Reg8::B, Emulator::DirectValue::BYTE] of Emulator::OpArgs
+      gen_op LD, 0x0a, 8, [Reg8::A, Reg16Mem::BC] of Emulator::OpArgs
+      gen_op LD, 0x0e, 8, [Reg8::C, Emulator::DirectValue::BYTE] of Emulator::OpArgs
+      gen_op LD, 0x12, 8, [Reg16Mem::DE, Reg8::A] of Emulator::OpArgs
+      gen_op LD, 0x16, 8, [Reg8::D, Emulator::DirectValue::BYTE] of Emulator::OpArgs
+      gen_op LD, 0x1a, 8, [Reg8::A, Reg16Mem::DE] of Emulator::OpArgs
+      gen_op LD, 0x1e, 8, [Reg8::E, Emulator::DirectValue::BYTE] of Emulator::OpArgs
+      gen_op LD, 0x26, 8, [Reg8::H, Emulator::DirectValue::BYTE] of Emulator::OpArgs
+      gen_op LD, 0x2e, 8, [Reg8::L, Emulator::DirectValue::BYTE] of Emulator::OpArgs
+      gen_op LD, 0x36, 12, [Reg16Mem::HL, Emulator::DirectValue::BYTE] of Emulator::OpArgs
+      gen_op LD, 0x3e, 8, [Reg8::A, Emulator::DirectValue::BYTE] of Emulator::OpArgs
+      gen_op LD, 0x40, 4, [Reg8::B, Reg8::B] of Emulator::OpArgs
+      gen_op LD, 0x41, 4, [Reg8::B, Reg8::C] of Emulator::OpArgs
+      gen_op LD, 0x42, 4, [Reg8::B, Reg8::D] of Emulator::OpArgs
+      gen_op LD, 0x43, 4, [Reg8::B, Reg8::E] of Emulator::OpArgs
+      gen_op LD, 0x44, 4, [Reg8::B, Reg8::H] of Emulator::OpArgs
+      gen_op LD, 0x45, 4, [Reg8::B, Reg8::L] of Emulator::OpArgs
+      gen_op LD, 0x46, 8, [Reg8::B, Reg16Mem::HL] of Emulator::OpArgs
+      gen_op LD, 0x47, 4, [Reg8::B, Reg8::A] of Emulator::OpArgs
+      gen_op LD, 0x48, 4, [Reg8::C, Reg8::B] of Emulator::OpArgs
+      gen_op LD, 0x49, 4, [Reg8::C, Reg8::C] of Emulator::OpArgs
+      gen_op LD, 0x4a, 4, [Reg8::C, Reg8::D] of Emulator::OpArgs
+      gen_op LD, 0x4b, 4, [Reg8::C, Reg8::E] of Emulator::OpArgs
+      gen_op LD, 0x4c, 4, [Reg8::C, Reg8::H] of Emulator::OpArgs
+      gen_op LD, 0x4d, 4, [Reg8::C, Reg8::L] of Emulator::OpArgs
+      gen_op LD, 0x4e, 8, [Reg8::C, Reg16Mem::HL] of Emulator::OpArgs
+      gen_op LD, 0x4f, 4, [Reg8::C, Reg8::A] of Emulator::OpArgs
+      gen_op LD, 0x50, 4, [Reg8::D, Reg8::B] of Emulator::OpArgs
+      gen_op LD, 0x51, 4, [Reg8::D, Reg8::C] of Emulator::OpArgs
+      gen_op LD, 0x52, 4, [Reg8::D, Reg8::D] of Emulator::OpArgs
+      gen_op LD, 0x53, 4, [Reg8::D, Reg8::E] of Emulator::OpArgs
+      gen_op LD, 0x54, 4, [Reg8::D, Reg8::H] of Emulator::OpArgs
+      gen_op LD, 0x55, 4, [Reg8::D, Reg8::L] of Emulator::OpArgs
+      gen_op LD, 0x56, 8, [Reg8::D, Reg16Mem::HL] of Emulator::OpArgs
+      gen_op LD, 0x57, 4, [Reg8::D, Reg8::A] of Emulator::OpArgs
+      gen_op LD, 0x58, 4, [Reg8::E, Reg8::B] of Emulator::OpArgs
+      gen_op LD, 0x59, 4, [Reg8::E, Reg8::C] of Emulator::OpArgs
+      gen_op LD, 0x5a, 4, [Reg8::E, Reg8::D] of Emulator::OpArgs
+      gen_op LD, 0x5b, 4, [Reg8::E, Reg8::E] of Emulator::OpArgs
+      gen_op LD, 0x5c, 4, [Reg8::E, Reg8::H] of Emulator::OpArgs
+      gen_op LD, 0x5d, 4, [Reg8::E, Reg8::L] of Emulator::OpArgs
+      gen_op LD, 0x5f, 4, [Reg8::E, Reg8::A] of Emulator::OpArgs
+      gen_op LD, 0x5e, 8, [Reg8::E, Reg16Mem::HL] of Emulator::OpArgs
+      gen_op LD, 0x60, 4, [Reg8::H, Reg8::B] of Emulator::OpArgs
+      gen_op LD, 0x61, 4, [Reg8::H, Reg8::C] of Emulator::OpArgs
+      gen_op LD, 0x62, 4, [Reg8::H, Reg8::D] of Emulator::OpArgs
+      gen_op LD, 0x63, 4, [Reg8::H, Reg8::E] of Emulator::OpArgs
+      gen_op LD, 0x64, 4, [Reg8::H, Reg8::H] of Emulator::OpArgs
+      gen_op LD, 0x65, 4, [Reg8::H, Reg8::L] of Emulator::OpArgs
+      gen_op LD, 0x66, 8, [Reg8::H, Reg16Mem::HL] of Emulator::OpArgs
+      gen_op LD, 0x67, 4, [Reg8::H, Reg8::A] of Emulator::OpArgs
+      gen_op LD, 0x68, 4, [Reg8::L, Reg8::B] of Emulator::OpArgs
+      gen_op LD, 0x69, 4, [Reg8::L, Reg8::C] of Emulator::OpArgs
+      gen_op LD, 0x6a, 4, [Reg8::L, Reg8::D] of Emulator::OpArgs
+      gen_op LD, 0x6b, 4, [Reg8::L, Reg8::E] of Emulator::OpArgs
+      gen_op LD, 0x6c, 4, [Reg8::L, Reg8::H] of Emulator::OpArgs
+      gen_op LD, 0x6d, 4, [Reg8::L, Reg8::L] of Emulator::OpArgs
+      gen_op LD, 0x6e, 8, [Reg8::L, Reg16Mem::HL] of Emulator::OpArgs
+      gen_op LD, 0x6f, 4, [Reg8::L, Reg8::A] of Emulator::OpArgs
+      gen_op LD, 0x70, 8, [Reg16Mem::HL, Reg8::B] of Emulator::OpArgs
+      gen_op LD, 0x71, 8, [Reg16Mem::HL, Reg8::C] of Emulator::OpArgs
+      gen_op LD, 0x72, 8, [Reg16Mem::HL, Reg8::D] of Emulator::OpArgs
+      gen_op LD, 0x73, 8, [Reg16Mem::HL, Reg8::E] of Emulator::OpArgs
+      gen_op LD, 0x74, 8, [Reg16Mem::HL, Reg8::H] of Emulator::OpArgs
+      gen_op LD, 0x75, 8, [Reg16Mem::HL, Reg8::L] of Emulator::OpArgs
+      gen_op LD, 0x77, 8, [Reg16Mem::HL, Reg8::A] of Emulator::OpArgs
+      gen_op LD, 0x78, 4, [Reg8::A, Reg8::B] of Emulator::OpArgs
+      gen_op LD, 0x79, 4, [Reg8::A, Reg8::C] of Emulator::OpArgs
+      gen_op LD, 0x7a, 4, [Reg8::A, Reg8::D] of Emulator::OpArgs
+      gen_op LD, 0x7b, 4, [Reg8::A, Reg8::E] of Emulator::OpArgs
+      gen_op LD, 0x7c, 4, [Reg8::A, Reg8::H] of Emulator::OpArgs
+      gen_op LD, 0x7d, 4, [Reg8::A, Reg8::L] of Emulator::OpArgs
+      gen_op LD, 0x7e, 8, [Reg8::A, Reg16Mem::HL] of Emulator::OpArgs
+      gen_op LD, 0x7f, 4, [Reg8::A, Reg8::A] of Emulator::OpArgs
+
+      gen_op LD, 0xea, 16, [Emulator::DirectValueMem::SHORT, Reg8::A] of Emulator::OpArgs
+      gen_op LD, 0xfa, 16, [Reg8::A, Emulator::DirectValueMem::SHORT] of Emulator::OpArgs
+      gen_op LD, 0xf2, 8, [Reg8::A, Reg8Mem::C] of Emulator::OpArgs
+      gen_op LD, 0xe2, 8, [Reg8Mem::C, Reg8::A] of Emulator::OpArgs
+      gen_op LD, 0xe0, 12, [Emulator::DirectValueMem::BYTE, Reg8::A] of Emulator::OpArgs
+      gen_op LD, 0xf0, 12, [Reg8::A, Emulator::DirectValueMem::BYTE] of Emulator::OpArgs
+      gen_op LD, 0x01, 12, [Reg16::BC, Emulator::DirectValue::SHORT] of Emulator::OpArgs
+      gen_op LD, 0x11, 12, [Reg16::DE, Emulator::DirectValue::SHORT] of Emulator::OpArgs
+      gen_op LD, 0x21, 12, [Reg16::HL, Emulator::DirectValue::SHORT] of Emulator::OpArgs
+      gen_op LD, 0x31, 12, [Reg16::SP, Emulator::DirectValue::SHORT] of Emulator::OpArgs
+      gen_op LD, 0xf9, 8, [Reg16::SP, Reg16::HL] of Emulator::OpArgs
+      gen_op LD, 0x08, 20, [Emulator::DirectValueMem::SHORT, Reg16::SP] of Emulator::OpArgs
     end
   end
 end

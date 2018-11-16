@@ -15,7 +15,7 @@ module Crestal::Myth::Emulator
     C
   end
 
-  alias OpArgs = Component::Reg8 | Component::Reg16 | Component::Reg16Mem | UInt16 | Emulator::DirectValue | Emulator::Conditional
+  alias OpArgs = Component::Reg8 | Component::Reg16 | Component::Reg16Mem | Emulator::DirectValue | Emulator::Conditional
 
   class Opcode
     @code = 0_u8

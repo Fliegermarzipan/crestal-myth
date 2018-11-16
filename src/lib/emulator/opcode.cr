@@ -1,4 +1,5 @@
 require "benchmark"
+require "colorize"
 require "../constants"
 require "../component/cpuregs"
 
@@ -33,33 +34,34 @@ module Crestal::Myth::Emulator
     end
 
     def asminstr
-      "INVALID"
+      "<INVALID>"
     end
 
     def disasm(cpu)
-      ret = "#{asminstr}"
-      @args.each do |arg|
+      ret = "#{asminstr}\t"
+      @args.each.with_index do |arg, argi|
         case arg
         when Component::Reg8, Component::Reg16, Conditional
-          ret += " #{arg.to_s}"
+          ret += "#{arg.to_s}"
         when Component::Reg16Mem
-          ret += " (#{arg.to_s})"
+          ret += "(#{arg.to_s})"
         when UInt16
-          ret += " ($#{arg})"
+          ret += "($#{arg})"
         when DirectValue
           case arg
           when DirectValue::BYTE
-            ret += " $#{cpu.ram.read(cpu.reg.read(Component::Reg16::PC)).to_s(16).rjust(2, '0')}"
+            ret += "$#{cpu.ram.read(cpu.reg.read(Component::Reg16::PC)).to_s(16).rjust(2, '0')}"
           when DirectValue::SHORT
-            ret += " $#{cpu.ram.read16(cpu.reg.read(Component::Reg16::PC)).to_s(16).rjust(4, '0')}"
+            ret += "$#{cpu.ram.read16(cpu.reg.read(Component::Reg16::PC)).to_s(16).rjust(4, '0')}"
           else
             Log.new.fatal "Impossible disassembly DirectValue #{arg}"
           end
         else
           Log.new.fatal "Impossible disassembly #{arg}"
         end
+        ret += ",\t" if argi < @args.size - 1
       end
-      ret
+      ret.downcase.colorize(:red)
     end
 
     def call(cpu) : Bool
@@ -75,7 +77,7 @@ module Crestal::Myth::Emulator
       if t_delta > 0.nanoseconds
         sleep t_delta
       else
-        Log.new.warn "Running late by #{t_delta.abs.nanoseconds}ns in #{disasm cpu}"
+        Log.new.warn "Last instruction ran late by #{t_delta.abs.nanoseconds.colorize(:yellow)}ns"
       end
       ret
     end

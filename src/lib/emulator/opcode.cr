@@ -2,19 +2,30 @@ require "benchmark"
 require "../constants"
 require "../component/cpuregs"
 
+macro to_opargs(a)
+  {{a}} of Component::Reg8 | Component::Reg16 | Component::Reg16Mem | UInt16 | Emulator::DirectValue | Emulator::Conditional
+end
+
 module Crestal::Myth::Emulator
   enum DirectValue
     BYTE
     SHORT
   end
 
+  enum Conditional
+    NZ
+    Z
+    NC
+    C
+  end
+
   class Opcode
     @code = 0_u8
     @cycles = 0
-    @args = [] of Component::Reg8 | Component::Reg16 | Component::Reg16Mem | UInt16 | DirectValue
+    @args = [] of Component::Reg8 | Component::Reg16 | Component::Reg16Mem | UInt16 | DirectValue | Conditional
     @time : Time::Span
 
-    def initialize(@code, @cycles, @args = [] of DirectValue)
+    def initialize(@code, @cycles, @args = @args)
       @time = CPU_CLOCK_TIME * @cycles
     end
 
@@ -25,8 +36,8 @@ module Crestal::Myth::Emulator
     def disasm(cpu)
       ret = "#{asminstr}"
       @args.each do |arg|
-        case typeof(arg)
-        when Component::Reg8, Component::Reg16
+        case arg
+        when Component::Reg8, Component::Reg16, Conditional
           ret += " #{arg.to_s}"
         when Component::Reg16Mem
           ret += " (#{arg.to_s})"
@@ -35,10 +46,14 @@ module Crestal::Myth::Emulator
         when DirectValue
           case arg
           when DirectValue::BYTE
-            ret += " $#{cpu.ram.read(cpu.reg.read(Component::Reg16::PC) + 1).to_s(16).rjust(2, '0')}"
+            ret += " $#{cpu.ram.read(cpu.reg.read(Component::Reg16::PC)).to_s(16).rjust(2, '0')}"
           when DirectValue::SHORT
-            ret += " $#{cpu.ram.read16(cpu.reg.read(Component::Reg16::PC) + 1).to_s(16).rjust(4, '0')}"
+            ret += " $#{cpu.ram.read16(cpu.reg.read(Component::Reg16::PC)).to_s(16).rjust(4, '0')}"
+          else
+            Log.new.fatal "Impossible disassembly DirectValue #{arg}"
           end
+        else
+          Log.new.fatal "Impossible disassembly #{arg}"
         end
       end
       ret

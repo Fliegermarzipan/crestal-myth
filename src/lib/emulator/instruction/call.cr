@@ -14,6 +14,7 @@ module Crestal::Myth::Emulator::Instruction
         case arg
         when DirectValue::SHORT
           jmp = cpu.ram.read16 cpu.reg.read Component::Reg16::PC
+          cpu.reg.inc Component::Reg16::PC, 2
         when Conditional::NZ
           cond = !cpu.reg.flag_read(Component::Flag::Z)
         when Conditional::Z

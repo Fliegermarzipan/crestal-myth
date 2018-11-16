@@ -15,13 +15,13 @@ module Crestal::Myth::Emulator::Instruction
         when DirectValue::SHORT
           jmp = cpu.ram.read16 cpu.reg.read Component::Reg16::PC
         when Conditional::NZ
-          cond = !cpu.reg.read(Component::Reg8::F).bit(7)
+          cond = !cpu.reg.flag_read(Component::Flag::Z)
         when Conditional::Z
-          cond = cpu.reg.read(Component::Reg8::F).bit(7)
+          cond = cpu.reg.flag_read(Component::Flag::Z)
         when Conditional::NC
-          cond = !cpu.reg.read(Component::Reg8::F).bit(4)
+          cond = !cpu.reg.flag_read(Component::Flag::C)
         when Conditional::C
-          cond = cpu.reg.read(Component::Reg8::F).bit(4)
+          cond = cpu.reg.flag_read(Component::Flag::C)
         else
           Log.new.fatal "Unimplemented #{disasm cpu}"
         end

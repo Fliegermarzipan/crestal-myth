@@ -8,6 +8,18 @@ module Crestal::Myth::Component
     E
     H
     L
+    Placeholder
+  end
+
+  enum Reg8Mem
+    A
+    F
+    B
+    C
+    D
+    E
+    H
+    L
   end
 
   enum Reg16
@@ -17,6 +29,7 @@ module Crestal::Myth::Component
     HL
     SP
     PC
+    Placeholder
   end
 
   enum Reg16Mem

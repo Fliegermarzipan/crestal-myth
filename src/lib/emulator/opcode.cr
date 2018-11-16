@@ -2,10 +2,6 @@ require "benchmark"
 require "../constants"
 require "../component/cpuregs"
 
-macro to_opargs(a)
-  {{a}} of Component::Reg8 | Component::Reg16 | Component::Reg16Mem | UInt16 | Emulator::DirectValue | Emulator::Conditional
-end
-
 module Crestal::Myth::Emulator
   enum DirectValue
     BYTE
@@ -19,10 +15,12 @@ module Crestal::Myth::Emulator
     C
   end
 
+  alias OpArgs = Component::Reg8 | Component::Reg16 | Component::Reg16Mem | Emulator::DirectValue | Emulator::Conditional
+
   class Opcode
     @code = 0_u8
     @cycles = 0
-    @args = [] of Component::Reg8 | Component::Reg16 | Component::Reg16Mem | UInt16 | DirectValue | Conditional
+    @args = [] of OpArgs
     @time : Time::Span
 
     def initialize(@code, @cycles, @args = @args)

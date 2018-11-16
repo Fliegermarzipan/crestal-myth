@@ -39,11 +39,11 @@ module Crestal::Myth::Component
 
     def seed_ops
       @ops[0x00] = Emulator::Instruction::NOP.new 0x00_u8, 4
-      @ops[0xc2] = Emulator::Instruction::JP.new 0xc2_u8, 12, to_opargs([Emulator::Conditional::NZ])
-      @ops[0xc3] = Emulator::Instruction::JP.new 0xc3_u8, 12, to_opargs([Emulator::DirectValue::SHORT])
-      @ops[0xca] = Emulator::Instruction::JP.new 0xca_u8, 12, to_opargs([Emulator::Conditional::Z])
-      @ops[0xd2] = Emulator::Instruction::JP.new 0xd2_u8, 12, to_opargs([Emulator::Conditional::NC])
-      @ops[0xda] = Emulator::Instruction::JP.new 0xda_u8, 12, to_opargs([Emulator::Conditional::C])
+      @ops[0xc2] = Emulator::Instruction::JP.new 0xc2_u8, 12, [Emulator::Conditional::NZ] of Emulator::OpArgs
+      @ops[0xc3] = Emulator::Instruction::JP.new 0xc3_u8, 12, [Emulator::DirectValue::SHORT] of Emulator::OpArgs
+      @ops[0xca] = Emulator::Instruction::JP.new 0xca_u8, 12, [Emulator::Conditional::Z] of Emulator::OpArgs
+      @ops[0xd2] = Emulator::Instruction::JP.new 0xd2_u8, 12, [Emulator::Conditional::NC] of Emulator::OpArgs
+      @ops[0xda] = Emulator::Instruction::JP.new 0xda_u8, 12, [Emulator::Conditional::C] of Emulator::OpArgs
     end
   end
 end

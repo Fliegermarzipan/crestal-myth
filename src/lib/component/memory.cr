@@ -1,6 +1,6 @@
 module Crestal::Myth::Component
   class Memory
-    @raw = Bytes.new(0xFFFF)
+    @raw = Bytes.new(0x10000)
 
     def write(addr : UInt16, val : UInt8)
       @raw[addr] = val

@@ -20,6 +20,7 @@ module Crestal::Myth::Emulator::Instruction
           res ^= cpu.ram.read cpu.reg.read Component::Reg16::HL
         else
           Log.new.fatal "Unimplemented #{disasm cpu}"
+          return false
         end
       end
 

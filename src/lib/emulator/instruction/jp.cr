@@ -26,6 +26,7 @@ module Crestal::Myth::Emulator::Instruction
           cond = cpu.reg.flag_read(Component::Flag::C)
         else
           Log.new.fatal "Unimplemented #{disasm cpu}"
+          return false
         end
       end
 

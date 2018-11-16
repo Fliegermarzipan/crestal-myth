@@ -8,6 +8,11 @@ module Crestal::Myth::Emulator
     SHORT
   end
 
+  enum DirectValueMem
+    BYTE
+    SHORT
+  end
+
   enum Conditional
     NZ
     Z
@@ -15,7 +20,7 @@ module Crestal::Myth::Emulator
     C
   end
 
-  alias OpArgs = Component::Reg8 | Component::Reg16 | Component::Reg16Mem | Emulator::DirectValue | Emulator::Conditional
+  alias OpArgs = Component::Reg8 | Component::Reg8Mem | Component::Reg16 | Component::Reg16Mem | Emulator::DirectValue | Emulator::DirectValueMem | Emulator::Conditional
 
   class Opcode
     @code = 0_u8

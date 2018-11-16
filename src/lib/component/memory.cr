@@ -11,8 +11,8 @@ module Crestal::Myth::Component
     end
 
     def write16(addr : UInt16, val : UInt16)
-      @raw[addr + 1] = val >> 8
-      @raw[addr] = val
+      @raw[addr + 1] = (val >> 8).to_u8
+      @raw[addr] = val.to_u8
     end
 
     def read(addr : UInt16) : UInt8

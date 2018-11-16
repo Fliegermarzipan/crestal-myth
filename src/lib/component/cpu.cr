@@ -41,9 +41,14 @@ module Crestal::Myth::Component
       @ops[0x00] = Emulator::Instruction::NOP.new 0x00_u8, 4
       @ops[0xc2] = Emulator::Instruction::JP.new 0xc2_u8, 12, [Emulator::Conditional::NZ] of Emulator::OpArgs
       @ops[0xc3] = Emulator::Instruction::JP.new 0xc3_u8, 12, [Emulator::DirectValue::SHORT] of Emulator::OpArgs
+      @ops[0xc4] = Emulator::Instruction::CALL.new 0xc4_u8, 12, [Emulator::Conditional::NZ, Emulator::DirectValue::SHORT] of Emulator::OpArgs
       @ops[0xca] = Emulator::Instruction::JP.new 0xca_u8, 12, [Emulator::Conditional::Z] of Emulator::OpArgs
+      @ops[0xcc] = Emulator::Instruction::CALL.new 0xcc_u8, 12, [Emulator::Conditional::Z, Emulator::DirectValue::SHORT] of Emulator::OpArgs
+      @ops[0xcd] = Emulator::Instruction::CALL.new 0xcd_u8, 12, [Emulator::DirectValue::SHORT] of Emulator::OpArgs
       @ops[0xd2] = Emulator::Instruction::JP.new 0xd2_u8, 12, [Emulator::Conditional::NC] of Emulator::OpArgs
+      @ops[0xd4] = Emulator::Instruction::CALL.new 0xd4_u8, 12, [Emulator::Conditional::NC, Emulator::DirectValue::SHORT] of Emulator::OpArgs
       @ops[0xda] = Emulator::Instruction::JP.new 0xda_u8, 12, [Emulator::Conditional::C] of Emulator::OpArgs
+      @ops[0xdc] = Emulator::Instruction::CALL.new 0xdc_u8, 12, [Emulator::Conditional::C, Emulator::DirectValue::SHORT] of Emulator::OpArgs
     end
   end
 end

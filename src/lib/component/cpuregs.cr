@@ -25,10 +25,30 @@ module Crestal::Myth::Component
     HL
   end
 
+  enum Flag
+    C = 4
+    H = 5
+    N = 6
+    Z = 7
+  end
+
   class CPURegs
     @reg = StaticArray(UInt8, 8).new 0
     @sp = 0_u16
     @pc = 0_u16
+
+    def flag_read(f : Flag)
+      @reg[Reg8::F.value].bit(f.value)
+    end
+
+    def flag_write(f : Flag, b : Bool)
+      mask = 1 << f.value
+      if b
+        write Reg8::F, read(Reg8::F) | mask
+      else
+        write Reg8::F, read(Reg8::F) & ~mask
+      end
+    end
 
     def write(reg : Reg8, value : UInt8)
       @reg[reg.value] = value.as(UInt8)

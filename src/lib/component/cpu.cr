@@ -4,7 +4,7 @@ require "../emulator/instruction/*"
 
 module Crestal::Myth::Component
   class CPU
-    @ops = StaticArray(Emulator::Opcode, 0xFF).new(Emulator::Opcode.new(0x00_u8, 0))
+    @ops = StaticArray(Emulator::Opcode, 0x100).new(Emulator::Opcode.new(0x00_u8, 0))
 
     def initialize(@ram : Memory)
       @log = Log.new

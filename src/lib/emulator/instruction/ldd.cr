@@ -39,7 +39,7 @@ module Crestal::Myth::Emulator::Instruction
         end
       end
 
-      cpu.reg.inc Component::Reg16::HL
+      cpu.reg.dec Component::Reg16::HL
 
       true
     end

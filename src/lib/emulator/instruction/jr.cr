@@ -4,7 +4,7 @@ module Crestal::Myth::Emulator::Instruction
   class JR < Opcode
     def call(cpu) : Bool
       cond = true
-      jmp = 0x0000_i16
+      jmp = 0x00_i8
 
       @args.each do |arg|
         case arg

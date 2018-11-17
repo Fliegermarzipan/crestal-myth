@@ -5,6 +5,7 @@ require "../emulator/instruction/*"
 module Crestal::Myth::Component
   class CPU
     @ops = StaticArray(Emulator::Opcode, 0x100).new(Emulator::Opcode.new(0x00_u8, 0))
+    @cb_ops = StaticArray(Emulator::Opcode, 0x100).new(Emulator::Opcode.new(0x00_u8, 0))
 
     @interrupt_master_enable : Bool = true
 
@@ -45,12 +46,23 @@ module Crestal::Myth::Component
       addr = @reg.read Reg16::PC
       @reg.inc Reg16::PC
       opcode = @ram.read addr
-      @log.debug "At 0x#{addr.to_s(16).rjust(4, '0')} (op 0x#{opcode.to_s(16).rjust(2, '0')}) - #{@ops[opcode].disasm(self)}"
-      @ops[opcode].run self
+      is_cb = opcode == 0xcb
+      handler = @ops
+      if is_cb
+        opcode = @ram.read @reg.read Reg16::PC
+        @reg.inc Reg16::PC
+        handler = @cb_ops
+      end
+      @log.debug "At 0x#{addr.to_s(16).rjust(4, '0')} (op #{is_cb ? "0xcb" : "  0x"}#{opcode.to_s(16).rjust(2, '0')}) - #{handler[opcode].disasm(self)}"
+      handler[opcode].run self
     end
 
     macro gen_op(name, op, time, args)
-      @ops[{{op}}] = Emulator::Instruction::{{name}}.new {{op}}_u8, {{time}}, {{args.id}} of Emulator::OpArgs
+      {% if op & 0xff00 == 0xcb00 %}
+        @cb_ops[{{op & 0xff}}] = Emulator::Instruction::{{name}}.new {{op & 0xff}}_u8, {{time}}, {{args.id}} of Emulator::OpArgs
+      {% else %}
+        @ops[{{op}}] = Emulator::Instruction::{{name}}.new {{op}}_u8, {{time}}, {{args.id}} of Emulator::OpArgs
+      {% end %}
     end
 
     def seed_ops

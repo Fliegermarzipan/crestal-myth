@@ -83,6 +83,7 @@ module Crestal::Myth::Component
       gen_op JP, 0xca, 12, [Emulator::Conditional::Z]
       gen_op JP, 0xd2, 12, [Emulator::Conditional::NC]
       gen_op JP, 0xda, 12, [Emulator::Conditional::C]
+      gen_op JP, 0xe9, 4, [Reg16Mem::HL]
 
       gen_op CALL, 0xc4, 12, [Emulator::Conditional::NZ, Emulator::DirectValue::SHORT]
       gen_op CALL, 0xcc, 12, [Emulator::Conditional::Z, Emulator::DirectValue::SHORT]
@@ -256,6 +257,48 @@ module Crestal::Myth::Component
       gen_op AND, 0xa5, 4, [Reg8::L]
       gen_op AND, 0xa6, 8, [Reg16Mem::HL]
       gen_op AND, 0xe6, 8, [Emulator::DirectValue::BYTE]
+
+      gen_op SWAP, 0xcb30, 8, [Reg8::B]
+      gen_op SWAP, 0xcb31, 8, [Reg8::C]
+      gen_op SWAP, 0xcb32, 8, [Reg8::D]
+      gen_op SWAP, 0xcb33, 8, [Reg8::E]
+      gen_op SWAP, 0xcb34, 8, [Reg8::H]
+      gen_op SWAP, 0xcb35, 8, [Reg8::L]
+      gen_op SWAP, 0xcb36, 16, [Reg16Mem::HL]
+      gen_op SWAP, 0xcb37, 8, [Reg8::A]
+
+      gen_op RST, 0xc7, 32, [0x00_u8]
+      gen_op RST, 0xcf, 32, [0x08_u8]
+      gen_op RST, 0xd7, 32, [0x10_u8]
+      gen_op RST, 0xdf, 32, [0x18_u8]
+      gen_op RST, 0xe7, 32, [0x20_u8]
+      gen_op RST, 0xef, 32, [0x28_u8]
+      gen_op RST, 0xf7, 32, [0x30_u8]
+      gen_op RST, 0xff, 32, [0x38_u8]
+
+      gen_op ADD, 0x80, 4, [Reg8::A, Reg8::B]
+      gen_op ADD, 0x81, 4, [Reg8::A, Reg8::C]
+      gen_op ADD, 0x82, 4, [Reg8::A, Reg8::D]
+      gen_op ADD, 0x83, 4, [Reg8::A, Reg8::E]
+      gen_op ADD, 0x84, 4, [Reg8::A, Reg8::H]
+      gen_op ADD, 0x85, 4, [Reg8::A, Reg8::L]
+      gen_op ADD, 0x86, 8, [Reg8::A, Reg16Mem::HL]
+      gen_op ADD, 0x87, 4, [Reg8::A, Reg8::A]
+      gen_op ADD, 0xc6, 8, [Reg8::A, Emulator::DirectValue::BYTE]
+      gen_op ADD, 0x09, 8, [Reg16::HL, Reg16::BC]
+      gen_op ADD, 0x19, 8, [Reg16::HL, Reg16::DE]
+      gen_op ADD, 0x29, 8, [Reg16::HL, Reg16::HL]
+      gen_op ADD, 0x39, 8, [Reg16::HL, Reg16::SP]
+
+      gen_op POP, 0xf1, 12, [Reg16::AF]
+      gen_op POP, 0xc1, 12, [Reg16::BC]
+      gen_op POP, 0xd1, 12, [Reg16::DE]
+      gen_op POP, 0xe1, 12, [Reg16::HL]
+
+      gen_op PUSH, 0xf5, 16, [Reg16::AF]
+      gen_op PUSH, 0xc5, 16, [Reg16::BC]
+      gen_op PUSH, 0xd5, 16, [Reg16::DE]
+      gen_op PUSH, 0xe5, 16, [Reg16::HL]
     end
   end
 end

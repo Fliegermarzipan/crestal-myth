@@ -53,7 +53,7 @@ module Crestal::Myth::Emulator
           when DirectValue::SHORT
             ret += "$#{cpu.ram.read16(cpu.reg.read(Component::Reg16::PC)).to_s(16).rjust(4, '0')}"
           else
-            Log.new.fatal "Impossible disassembly DirectValue #{arg}"
+            Log.new.fatal "Impossible disassembly DirectValue #{arg} in #{@asminstr}"
           end
         when DirectValueMem
           case arg
@@ -62,10 +62,12 @@ module Crestal::Myth::Emulator
           when DirectValueMem::SHORT
             ret += "($#{cpu.ram.read16(cpu.reg.read(Component::Reg16::PC)).to_s(16).rjust(4, '0')})"
           else
-            Log.new.fatal "Impossible disassembly DirectValueMem #{arg}"
+            Log.new.fatal "Impossible disassembly DirectValueMem #{arg} in #{@asminstr}"
           end
+        when UInt8
+          ret += "$#{arg.to_s(16).rjust(2, '0')}"
         else
-          Log.new.fatal "Impossible disassembly #{arg}"
+          Log.new.fatal "Impossible disassembly #{arg} in #{@asminstr}"
         end
         if argi < @args.size - 1
           ret += ","

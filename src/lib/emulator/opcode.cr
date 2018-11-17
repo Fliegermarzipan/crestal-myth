@@ -28,28 +28,24 @@ module Crestal::Myth::Emulator
     @cycles = 0
     @args = [] of OpArgs
     @time : Time::Span
-    @type : String
+    @asminstr : String
 
     def initialize(@code, @cycles, @args = @args)
       @time = CPU_CLOCK_TIME * @cycles
 
-      @type = add_asminstr
+      @asminstr = add_asminstr
     end
 
     macro add_asminstr
       {% if @type.stringify.split("::").last == "Opcode" %}
         "<INVALID>"
       {% else %}
-        {{@type.stringify.split("::").last}}
+        {{@type.stringify.split("::").last}}.ljust(4)
       {% end %}
     end
 
-    def asminstr
-      @type.ljust(4)
-    end
-
     def disasm(cpu)
-      ret = "#{asminstr} "
+      ret = "#{@asminstr} "
       @args.each.with_index do |arg, argi|
         case arg
         when Component::Reg8, Component::Reg16, Conditional

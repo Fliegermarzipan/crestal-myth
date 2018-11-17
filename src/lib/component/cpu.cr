@@ -18,7 +18,9 @@ module Crestal::Myth::Component
       @reg.write Reg16::SP, 0xFFFE_u16
       @reg.write Reg16::PC, 0x0100_u16
 
+      @log.debug "Loading opcodes"
       seed_ops
+      @log.debug "CPU initialized"
     end
 
     def ram
@@ -66,16 +68,21 @@ module Crestal::Myth::Component
       gen_op CALL, 0xd4, 12, [Emulator::Conditional::NC, Emulator::DirectValue::SHORT]
       gen_op CALL, 0xdc, 12, [Emulator::Conditional::C, Emulator::DirectValue::SHORT]
 
+      gen_op LD, 0x01, 12, [Reg16::BC, Emulator::DirectValue::SHORT]
       gen_op LD, 0x02, 8, [Reg16Mem::BC, Reg8::A]
       gen_op LD, 0x06, 8, [Reg8::B, Emulator::DirectValue::BYTE]
+      gen_op LD, 0x08, 20, [Emulator::DirectValueMem::SHORT, Reg16::SP]
       gen_op LD, 0x0a, 8, [Reg8::A, Reg16Mem::BC]
       gen_op LD, 0x0e, 8, [Reg8::C, Emulator::DirectValue::BYTE]
+      gen_op LD, 0x11, 12, [Reg16::DE, Emulator::DirectValue::SHORT]
       gen_op LD, 0x12, 8, [Reg16Mem::DE, Reg8::A]
       gen_op LD, 0x16, 8, [Reg8::D, Emulator::DirectValue::BYTE]
       gen_op LD, 0x1a, 8, [Reg8::A, Reg16Mem::DE]
       gen_op LD, 0x1e, 8, [Reg8::E, Emulator::DirectValue::BYTE]
+      gen_op LD, 0x21, 12, [Reg16::HL, Emulator::DirectValue::SHORT]
       gen_op LD, 0x26, 8, [Reg8::H, Emulator::DirectValue::BYTE]
       gen_op LD, 0x2e, 8, [Reg8::L, Emulator::DirectValue::BYTE]
+      gen_op LD, 0x31, 12, [Reg16::SP, Emulator::DirectValue::SHORT]
       gen_op LD, 0x36, 12, [Reg16Mem::HL, Emulator::DirectValue::BYTE]
       gen_op LD, 0x3e, 8, [Reg8::A, Emulator::DirectValue::BYTE]
       gen_op LD, 0x40, 4, [Reg8::B, Reg8::B]
@@ -141,12 +148,6 @@ module Crestal::Myth::Component
       gen_op LD, 0x7d, 4, [Reg8::A, Reg8::L]
       gen_op LD, 0x7e, 8, [Reg8::A, Reg16Mem::HL]
       gen_op LD, 0x7f, 4, [Reg8::A, Reg8::A]
-
-      gen_op LD, 0x01, 12, [Reg16::BC, Emulator::DirectValue::SHORT]
-      gen_op LD, 0x08, 20, [Emulator::DirectValueMem::SHORT, Reg16::SP]
-      gen_op LD, 0x11, 12, [Reg16::DE, Emulator::DirectValue::SHORT]
-      gen_op LD, 0x21, 12, [Reg16::HL, Emulator::DirectValue::SHORT]
-      gen_op LD, 0x31, 12, [Reg16::SP, Emulator::DirectValue::SHORT]
       gen_op LD, 0xe0, 12, [Emulator::DirectValueMem::BYTE, Reg8::A]
       gen_op LD, 0xe2, 8, [Reg8Mem::C, Reg8::A]
       gen_op LD, 0xea, 16, [Emulator::DirectValueMem::SHORT, Reg8::A]
@@ -154,6 +155,9 @@ module Crestal::Myth::Component
       gen_op LD, 0xf2, 8, [Reg8::A, Reg8Mem::C]
       gen_op LD, 0xfa, 16, [Reg8::A, Emulator::DirectValueMem::SHORT]
       gen_op LD, 0xf9, 8, [Reg16::SP, Reg16::HL]
+
+      gen_op LDD, 0x32, 8, [Reg16Mem::HL, Reg8::A]
+      gen_op LDD, 0x3a, 8, [Reg8::A, Reg16Mem::HL]
     end
   end
 end

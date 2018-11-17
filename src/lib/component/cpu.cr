@@ -6,6 +6,16 @@ module Crestal::Myth::Component
   class CPU
     @ops = StaticArray(Emulator::Opcode, 0x100).new(Emulator::Opcode.new(0x00_u8, 0))
 
+    @interrupt_master_enable : Bool = true
+
+    def set_ime
+      @interrupt_master_enable = true
+    end
+
+    def reset_ime
+      @interrupt_master_enable = false
+    end
+
     def initialize(@ram : Memory)
       @log = Log.new
       @reg = CPURegs.new

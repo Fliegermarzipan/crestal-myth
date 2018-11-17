@@ -168,6 +168,82 @@ module Crestal::Myth::Component
 
       gen_op LDD, 0x32, 8, [Reg16Mem::HL, Reg8::A]
       gen_op LDD, 0x3a, 8, [Reg8::A, Reg16Mem::HL]
+
+      gen_op DEC, 0x05, 4, [Reg8::B]
+      gen_op DEC, 0x0d, 4, [Reg8::C]
+      gen_op DEC, 0x15, 4, [Reg8::D]
+      gen_op DEC, 0x1d, 4, [Reg8::E]
+      gen_op DEC, 0x25, 4, [Reg8::H]
+      gen_op DEC, 0x2d, 4, [Reg8::L]
+      gen_op DEC, 0x35, 12, [Reg16Mem::HL]
+      gen_op DEC, 0x3d, 4, [Reg8::A]
+      gen_op DEC, 0x0b, 8, [Reg16::BC]
+      gen_op DEC, 0x1b, 8, [Reg16::DE]
+      gen_op DEC, 0x2b, 8, [Reg16::HL]
+      gen_op DEC, 0x3b, 8, [Reg16::SP]
+
+      gen_op INC, 0x04, 4, [Reg8::B]
+      gen_op INC, 0x0c, 4, [Reg8::C]
+      gen_op INC, 0x14, 4, [Reg8::D]
+      gen_op INC, 0x1c, 4, [Reg8::E]
+      gen_op INC, 0x24, 4, [Reg8::H]
+      gen_op INC, 0x2c, 4, [Reg8::L]
+      gen_op INC, 0x34, 4, [Reg16Mem::HL]
+      gen_op INC, 0x3c, 4, [Reg8::A]
+      gen_op INC, 0x03, 8, [Reg16::BC]
+      gen_op INC, 0x13, 8, [Reg16::DE]
+      gen_op INC, 0x23, 8, [Reg16::HL]
+      gen_op INC, 0x33, 8, [Reg16::SP]
+
+      gen_op JR, 0x18, 8, [Emulator::DirectValue::BYTE]
+      gen_op JR, 0x20, 8, [Emulator::Conditional::NZ, Emulator::DirectValue::BYTE]
+      gen_op JR, 0x28, 8, [Emulator::Conditional::Z, Emulator::DirectValue::BYTE]
+      gen_op JR, 0x30, 8, [Emulator::Conditional::NC, Emulator::DirectValue::BYTE]
+      gen_op JR, 0x38, 8, [Emulator::Conditional::C, Emulator::DirectValue::BYTE]
+
+      gen_op DI, 0xf3, 4, "[]" # crystal macro bug workaround
+
+      gen_op CP, 0xbf, 4, [Reg8::A]
+      gen_op CP, 0xb8, 4, [Reg8::B]
+      gen_op CP, 0xb9, 4, [Reg8::C]
+      gen_op CP, 0xba, 4, [Reg8::D]
+      gen_op CP, 0xbb, 4, [Reg8::E]
+      gen_op CP, 0xbc, 4, [Reg8::H]
+      gen_op CP, 0xbd, 4, [Reg8::L]
+      gen_op CP, 0xbe, 8, [Reg16Mem::HL]
+      gen_op CP, 0xfe, 8, [Emulator::DirectValue::BYTE]
+
+      gen_op LDI, 0x2a, 8, [Reg8::A, Reg16Mem::HL]
+
+      gen_op OR, 0xb0, 4, [Reg8::B]
+      gen_op OR, 0xb1, 4, [Reg8::C]
+      gen_op OR, 0xb2, 4, [Reg8::D]
+      gen_op OR, 0xb3, 4, [Reg8::E]
+      gen_op OR, 0xb4, 4, [Reg8::H]
+      gen_op OR, 0xb5, 4, [Reg8::L]
+      gen_op OR, 0xb6, 8, [Reg16Mem::HL]
+      gen_op OR, 0xb7, 4, [Reg8::A]
+      gen_op OR, 0xf6, 8, [Emulator::DirectValue::BYTE]
+
+      gen_op RET, 0xc9, 8, "[]" # crystal macro bug workaround
+      gen_op RET, 0xc0, 8, [Emulator::Conditional::NZ]
+      gen_op RET, 0xc8, 8, [Emulator::Conditional::Z]
+      gen_op RET, 0xd0, 8, [Emulator::Conditional::NC]
+      gen_op RET, 0xd8, 8, [Emulator::Conditional::C]
+
+      gen_op EI, 0xfb, 4, "[]" # crystal macro bug workaround
+
+      gen_op CPL, 0x2f, 4, "[]" # crystal macro bug workaround
+
+      gen_op AND, 0xa7, 4, [Reg8::A]
+      gen_op AND, 0xa0, 4, [Reg8::B]
+      gen_op AND, 0xa1, 4, [Reg8::C]
+      gen_op AND, 0xa2, 4, [Reg8::D]
+      gen_op AND, 0xa3, 4, [Reg8::E]
+      gen_op AND, 0xa4, 4, [Reg8::H]
+      gen_op AND, 0xa5, 4, [Reg8::L]
+      gen_op AND, 0xa6, 8, [Reg16Mem::HL]
+      gen_op AND, 0xe6, 8, [Emulator::DirectValue::BYTE]
     end
   end
 end

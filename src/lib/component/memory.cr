@@ -26,5 +26,13 @@ module Crestal::Myth::Component
     def read16(addr : UInt16) : UInt16
       @raw[addr + 1].to_u16 << 8 | @raw[addr]
     end
+
+    def dec(addr : UInt16, amount = 1)
+      @raw[addr] -= amount
+    end
+
+    def inc(addr : UInt16, amount = 1)
+      @raw[addr] += amount
+    end
   end
 end

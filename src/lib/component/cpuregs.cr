@@ -50,8 +50,8 @@ module Crestal::Myth::Component
     @sp = 0_u16
     @pc = 0_u16
 
-    def flag_read(f : Flag)
-      @reg[Reg8::F.value].bit(f.value)
+    def flag_read(f : Flag) : Bool
+      @reg[Reg8::F.value].bit(f.value) == 1
     end
 
     def flag_write(f : Flag, b : Bool)

@@ -2,10 +2,6 @@ require "../opcode"
 
 module Crestal::Myth::Emulator::Instruction
   class LD < Opcode
-    def asminstr
-      "LD"
-    end
-
     def call(cpu) : Bool
       target_reg = true
       target = Component::Reg8::Placeholder

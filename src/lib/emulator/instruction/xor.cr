@@ -2,10 +2,6 @@ require "../opcode"
 
 module Crestal::Myth::Emulator::Instruction
   class XOR < Opcode
-    def asminstr
-      "XOR"
-    end
-
     def call(cpu) : Bool
       res = cpu.reg.read(Component::Reg8::A)
 

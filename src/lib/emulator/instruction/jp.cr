@@ -2,10 +2,6 @@ require "../opcode"
 
 module Crestal::Myth::Emulator::Instruction
   class JP < Opcode
-    def asminstr
-      "JP"
-    end
-
     def call(cpu) : Bool
       cond = true
       jmp = 0x0000_u16

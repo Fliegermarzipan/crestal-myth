@@ -75,6 +75,7 @@ module Crestal::Myth::Emulator
       ret.downcase.colorize(:red)
     end
 
+    @[AlwaysInline]
     def call(cpu) : Bool
       false
     end

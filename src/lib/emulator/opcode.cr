@@ -49,15 +49,13 @@ module Crestal::Myth::Emulator
     end
 
     def disasm(cpu)
-      ret = "#{asminstr}\t"
+      ret = "#{asminstr} "
       @args.each.with_index do |arg, argi|
         case arg
         when Component::Reg8, Component::Reg16, Conditional
           ret += "#{arg.to_s}"
-        when Component::Reg16Mem
+        when Component::Reg8Mem, Component::Reg16Mem
           ret += "(#{arg.to_s})"
-        when UInt16
-          ret += "($#{arg})"
         when DirectValue
           case arg
           when DirectValue::BYTE
@@ -67,10 +65,22 @@ module Crestal::Myth::Emulator
           else
             Log.new.fatal "Impossible disassembly DirectValue #{arg}"
           end
+        when DirectValueMem
+          case arg
+          when DirectValueMem::BYTE
+            ret += "($#{cpu.ram.read(cpu.reg.read(Component::Reg16::PC)).to_s(16).rjust(2, '0')})"
+          when DirectValueMem::SHORT
+            ret += "($#{cpu.ram.read16(cpu.reg.read(Component::Reg16::PC)).to_s(16).rjust(4, '0')})"
+          else
+            Log.new.fatal "Impossible disassembly DirectValueMem #{arg}"
+          end
         else
           Log.new.fatal "Impossible disassembly #{arg}"
         end
-        ret += ",\t" if argi < @args.size - 1
+        if argi < @args.size - 1
+          ret += ","
+          ret = ret.ljust(ret.size + 7 - (ret.size % 7))
+        end
       end
       ret.downcase.colorize(:red)
     end

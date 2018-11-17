@@ -37,6 +37,12 @@ module Crestal::Myth::Emulator::Instruction
         value = cpu.ram.read(0xFF00_u16 + cpu.reg.read(Component::Reg8.new(@args[1].as(Component::Reg8Mem).value)))
       when Component::Reg16Mem
         value = cpu.ram.read(cpu.reg.read(Component::Reg16.new(@args[1].as(Component::Reg16Mem).value)))
+      when DirectValueMem::SHORT
+        value = cpu.ram.read16 cpu.ram.read16 cpu.reg.read Component::Reg16::PC
+        cpu.reg.inc Component::Reg16::PC, 2
+      when DirectValueMem::BYTE
+        value = cpu.ram.read cpu.ram.read cpu.reg.read Component::Reg16::PC
+        cpu.reg.inc Component::Reg16::PC
       when DirectValue::SHORT
         value = cpu.ram.read16 cpu.reg.read Component::Reg16::PC
         cpu.reg.inc Component::Reg16::PC, 2

@@ -6,8 +6,8 @@ module Crestal::Myth::Component
       @raw[addr] = val
     end
 
-    def write(addr : UInt8)
-      write(addr + 0xFF00)
+    def write(addr : UInt8, val : UInt8)
+      write(addr.u_16 + 0xFF00, val)
     end
 
     def write16(addr : UInt16, val : UInt16)
@@ -20,7 +20,7 @@ module Crestal::Myth::Component
     end
 
     def read(addr : UInt8) : UInt8
-      read(addr + 0xFF00)
+      read(addr.to_u16 + 0xFF00)
     end
 
     def read16(addr : UInt16) : UInt16

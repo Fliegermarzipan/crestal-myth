@@ -1,4 +1,5 @@
 require "./cpuregs"
+require "./irq"
 require "../emulator/opcode"
 require "../emulator/instruction/*"
 
@@ -20,6 +21,7 @@ module Crestal::Myth::Component
     def initialize(@ram : Memory)
       @log = Log.new
       @reg = CPURegs.new
+      @irq = IRQ.new
 
       @reg.write Reg8::A, 0x01_u8
       @reg.write Reg8::F, 0xB0_u8
@@ -43,6 +45,7 @@ module Crestal::Myth::Component
     end
 
     def step
+      @irq.dispatch self
       addr = @reg.read Reg16::PC
       @reg.inc Reg16::PC
       opcode = @ram.read addr

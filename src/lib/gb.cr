@@ -20,6 +20,8 @@ module Crestal::Myth
 
     def run
       loop do
+        @cpu.ram.inc 0x44_u8
+        @cpu.ram.write 0x44_u8, 0_u8 if @cpu.ram.read(0x44_u8) > 153
         break unless @cpu.step
       end
     end

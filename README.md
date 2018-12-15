@@ -8,7 +8,8 @@ TODO: Write installation instructions here
 
 ## Usage
 
-TODO: Write usage instructions here
+Currently, crestal-myth will look for a file called `Tetris.gb` in the current directory.
+Place a GB ROM in that location and run `crestal-myth`
 
 ## Development
 
